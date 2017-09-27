@@ -7,7 +7,7 @@ class ExtraSensitiveReporterFilter(SafeExceptionReporterFilter):
         cleansed = super(ExtraSensitiveReporterFilter, self).get_post_parameters(*args, **kwargs).copy()
         for param in cleansed:
             for param_substring in settings.EXTRA_SENSITIVE_POST_PARAMETERS:
-                if param_substring in param:
+                if param_substring.lower() in param.lower():
                     cleansed[param] = CLEANSED_SUBSTITUTE
                     break
         return cleansed
@@ -16,7 +16,7 @@ class ExtraSensitiveReporterFilter(SafeExceptionReporterFilter):
         cleansed = dict(super(ExtraSensitiveReporterFilter, self).get_traceback_frame_variables(*args, **kwargs))
         for param in cleansed:
             for param_substring in settings.EXTRA_SENSITIVE_VARIABLES:
-                if param_substring in param:
+                if param_substring.lower() in param.lower():
                     cleansed[param] = CLEANSED_SUBSTITUTE
                     break
         return cleansed.items()
